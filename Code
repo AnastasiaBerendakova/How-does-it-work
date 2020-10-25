@@ -1,0 +1,259 @@
+clear;
+T = readtable('vectors.csv');
+%disp(a.data);
+%K=20000;
+
+%disp(T(2:K,4));
+
+%Start=2;
+
+%Start=20001;
+%K=39999;
+
+Start=40000;
+K=59998;
+
+%N = K-1;
+
+N=19999;
+
+X = zeros(N);
+for j = 1:N
+    X(j) = j;
+end
+
+%x=[1 2 3 4 5 6 7 8 9 10];
+y=table2array(T(Start:K,4));
+
+
+
+
+%y1=table2array(T(2:K,3));
+%y2=table2array(T(2:K,2));
+%y3=table2array(T(2:K,5));
+%plot(X,y);
+
+H = ones(N, 2);
+for j = 1:N
+    H(j,2) = X(j);
+end
+
+Ht=H.';
+HtH=Ht*H;
+HtH1=HtH^(-1);
+HtH1Ht=HtH1*Ht;
+HtH1HtY=HtH1Ht*y;
+HtH1HtYt=HtH1HtY.';
+Theta1=HtH1HtYt(1);
+Theta2=HtH1HtYt(2);
+
+
+
+HH = ones(N, 3);
+for j = 1:N
+    HH(j,2) = X(j);
+    HH(j,3) = X(j)*X(j);
+end
+
+HHt=HH.';
+HHtH=HHt*HH;
+HHtH1=HHtH^(-1);
+HHtH1Ht=HHtH1*HHt;
+HHtH1HtY=HHtH1Ht*y;
+HHtH1HtYt=HHtH1HtY.';
+Theta11=HHtH1HtYt(1);
+Theta22=HHtH1HtYt(2);
+Theta33=HHtH1HtYt(3);
+
+
+
+Ostatki=H*HtH1HtY-y;
+VybSr=0;
+Ncount=0;
+for k =1:N
+Ncount=Ncount+1;
+VybSr=VybSr+y(k);
+end
+
+VybS=VybSr/Ncount;
+mean(Ostatki);
+
+VybDi=0;
+
+for g=1:N
+VybDi=VybDi+(y(g)*y(g)-VybS*VybS);
+end
+
+VybDispersion=VybDi/Ncount;
+std(Ostatki);
+
+h = chi2gof(Ostatki,'cdf',{@normcdf,0,std(Ostatki)})
+
+[h2,p] = chi2gof(Ostatki,'Alpha',0.01)
+h4=chi2gof(Ostatki);
+%h=1 rejects the hypothesis at the default 5% significance level.
+
+Ostatki2=HH*HHtH1HtY-y;
+h1 = chi2gof(Ostatki2,'cdf',{@normcdf,0,std(Ostatki2)})
+
+[h3,p] = chi2gof(Ostatki2,'Alpha',0.01)
+h5=chi2gof(Ostatki);
+
+Otc1 = @(t) Theta1+Theta2*t;
+
+St=0;
+for r=1:N
+St=St+(y(r)-mean(y))^2;
+end
+
+St1=0;
+
+for q=1:N
+   St1=St1+(y(q)-Otc1(q))^2; 
+end
+
+Check1=(St-St1)/St;
+%R square
+Check11=(St1/N-2-1)^(1/2);
+%mean square error
+
+Otc2 = @(t) Theta11+Theta22*t+Theta33*t*t;
+
+St2=0;
+for q=1:N
+   St2=St2+(y(q)-Otc2(q))^2; 
+end
+
+Check2=(St-St2)/St;
+%R square
+Check22=(St2/N-3-1)^(1/2);
+%mean square errorclear;
+T = readtable('vectors.csv');
+%disp(a.data);
+%K=20000;
+
+%disp(T(2:K,4));
+
+%Start=2;
+
+%Start=20001;
+%K=39999;
+
+Start=40000;
+K=59998;
+
+%N = K-1;
+
+N=19999;
+
+X = zeros(N);
+for j = 1:N
+    X(j) = j;
+end
+
+%x=[1 2 3 4 5 6 7 8 9 10];
+y=table2array(T(Start:K,4));
+
+
+
+
+%y1=table2array(T(2:K,3));
+%y2=table2array(T(2:K,2));
+%y3=table2array(T(2:K,5));
+%plot(X,y);
+
+H = ones(N, 2);
+for j = 1:N
+    H(j,2) = X(j);
+end
+
+Ht=H.';
+HtH=Ht*H;
+HtH1=HtH^(-1);
+HtH1Ht=HtH1*Ht;
+HtH1HtY=HtH1Ht*y;
+HtH1HtYt=HtH1HtY.';
+Theta1=HtH1HtYt(1);
+Theta2=HtH1HtYt(2);
+
+
+
+HH = ones(N, 3);
+for j = 1:N
+    HH(j,2) = X(j);
+    HH(j,3) = X(j)*X(j);
+end
+
+HHt=HH.';
+HHtH=HHt*HH;
+HHtH1=HHtH^(-1);
+HHtH1Ht=HHtH1*HHt;
+HHtH1HtY=HHtH1Ht*y;
+HHtH1HtYt=HHtH1HtY.';
+Theta11=HHtH1HtYt(1);
+Theta22=HHtH1HtYt(2);
+Theta33=HHtH1HtYt(3);
+
+
+
+Ostatki=H*HtH1HtY-y;
+VybSr=0;
+Ncount=0;
+for k =1:N
+Ncount=Ncount+1;
+VybSr=VybSr+y(k);
+end
+
+VybS=VybSr/Ncount;
+mean(Ostatki);
+
+VybDi=0;
+
+for g=1:N
+VybDi=VybDi+(y(g)*y(g)-VybS*VybS);
+end
+
+VybDispersion=VybDi/Ncount;
+std(Ostatki);
+
+h = chi2gof(Ostatki,'cdf',{@normcdf,0,std(Ostatki)})
+
+[h2,p] = chi2gof(Ostatki,'Alpha',0.01)
+h4=chi2gof(Ostatki);
+%h=1 rejects the hypothesis at the default 5% significance level.
+
+Ostatki2=HH*HHtH1HtY-y;
+h1 = chi2gof(Ostatki2,'cdf',{@normcdf,0,std(Ostatki2)})
+
+[h3,p] = chi2gof(Ostatki2,'Alpha',0.01)
+h5=chi2gof(Ostatki);
+
+Otc1 = @(t) Theta1+Theta2*t;
+
+St=0;
+for r=1:N
+St=St+(y(r)-mean(y))^2;
+end
+
+St1=0;
+
+for q=1:N
+   St1=St1+(y(q)-Otc1(q))^2; 
+end
+
+Check1=(St-St1)/St;
+%R square
+Check11=(St1/N-2-1)^(1/2);
+%mean square error
+
+Otc2 = @(t) Theta11+Theta22*t+Theta33*t*t;
+
+St2=0;
+for q=1:N
+   St2=St2+(y(q)-Otc2(q))^2; 
+end
+
+Check2=(St-St2)/St;
+%R square
+Check22=(St2/N-3-1)^(1/2);
+%mean square error
